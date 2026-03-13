@@ -1,0 +1,135 @@
+.contact-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  padding: 48px;
+}
+
+.contact-left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact-heading {
+  font-family: var(--font-heading);
+  font-size: clamp(30px, 4vw, 44px);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.contact-sub {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.contact-availability {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--neon);
+}
+
+.avail-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--neon);
+  animation: pulse-glow 2s infinite;
+  flex-shrink: 0;
+}
+
+/* Right side */
+.contact-right {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  transition: all 0.25s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.contact-neon:hover {
+  border-color: var(--neon);
+  background: rgba(0, 245, 196, 0.04);
+  box-shadow: 0 4px 20px rgba(0, 245, 196, 0.1);
+}
+
+.contact-neon2:hover {
+  border-color: var(--neon2);
+  background: rgba(59, 130, 246, 0.04);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.1);
+}
+
+.contact-neon4:hover {
+  border-color: var(--neon4);
+  background: rgba(168, 85, 247, 0.04);
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.1);
+}
+
+.contact-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.contact-info {
+  flex: 1;
+}
+
+.contact-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.contact-value {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text);
+}
+
+.contact-arrow {
+  font-size: 16px;
+  color: var(--muted);
+  transition: transform 0.2s, color 0.2s;
+}
+
+.contact-link:hover .contact-arrow {
+  transform: translateX(4px);
+  color: var(--neon);
+}
+
+@media (max-width: 768px) {
+  .contact-panel {
+    grid-template-columns: 1fr;
+    padding: 32px 24px;
+    gap: 36px;
+  }
+}

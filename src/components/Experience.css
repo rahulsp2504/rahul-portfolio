@@ -1,0 +1,129 @@
+.timeline {
+  position: relative;
+  padding-left: 32px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--neon), var(--neon2), transparent);
+  opacity: 0.4;
+}
+
+.timeline-entry {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.timeline-entry:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -38px;
+  top: 28px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid;
+  background: var(--bg);
+}
+
+.entry-neon .timeline-dot {
+  border-color: var(--neon);
+  box-shadow: 0 0 12px rgba(0, 245, 196, 0.5);
+}
+
+.entry-neon2 .timeline-dot {
+  border-color: var(--neon2);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
+}
+
+.timeline-content {
+  animation: slideInLeft 0.5s ease both;
+}
+
+/* Experience card header */
+.exp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.exp-company {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.exp-role {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.exp-meta {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.exp-period {
+  font-family: var(--font-space);
+  font-size: 12px;
+  color: var(--neon);
+  margin-bottom: 4px;
+}
+
+.exp-location {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* Bullets */
+.exp-bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+}
+
+.exp-bullet {
+  display: flex;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  align-items: flex-start;
+}
+
+.bullet-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 8px;
+}
+
+.bullet-dot.neon { background: var(--neon); }
+.bullet-dot.neon2 { background: var(--neon2); }
+
+@media (max-width: 640px) {
+  .exp-header {
+    flex-direction: column;
+  }
+  .exp-meta {
+    text-align: left;
+  }
+}
