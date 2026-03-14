@@ -1,26 +1,6 @@
 import React from 'react';
 import './Hero.css';
-
-const stats = [
-  {
-    value: '46%',
-    label: 'Reduction in manual work via automation',
-    color: 'neon',
-    delay: '0.1s',
-  },
-  {
-    value: '27%',
-    label: 'Accuracy lift in AI expression detection',
-    color: 'neon2',
-    delay: '0.25s',
-  },
-  {
-    value: '23%',
-    label: 'Data accuracy improvement via geocoding',
-    color: 'neon3',
-    delay: '0.4s',
-  },
-];
+import HeroMap from './HeroMap';
 
 export default function Hero() {
   return (
@@ -31,12 +11,15 @@ export default function Hero() {
       <div className="hero-content">
         <div className="hero-left">
           <div className="hero-eyebrow">
-            <span className="eyebrow-dot" />
-            <span>Engineer</span>
+            <span className="hero-tag">
+              <span className="eyebrow-dot" />
+              <span>Available for work</span>
+            </span>
           </div>
 
           <h1 className="hero-title">
             <span className="hero-first">Rahul</span>
+            <br />
             <span className="hero-last">Pandit</span>
           </h1>
 
@@ -45,9 +28,8 @@ export default function Hero() {
             <br />
             Ex Software Engineer <span className="neon">@</span> Target
             <br />
-            <span className="hero-spec"> Full Stack Engineering · Geospatial · AI Systems · </span>
+            <span className="hero-spec">Full Stack · Geospatial · AI Systems</span>
           </p>
-
 
           <div className="hero-actions">
             <a href="#career-map" className="btn btn-primary">
@@ -63,16 +45,7 @@ export default function Hero() {
         </div>
 
         <div className="hero-right">
-          {stats.map((s, i) => (
-            <div
-              key={i}
-              className={`stat-card stat-${s.color}`}
-              style={{ animationDelay: s.delay }}
-            >
-              <div className="stat-value">{s.value}</div>
-              <div className="stat-label">{s.label}</div>
-            </div>
-          ))}
+          <HeroMap />
         </div>
       </div>
 

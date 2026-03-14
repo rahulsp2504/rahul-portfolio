@@ -2,6 +2,34 @@
    DESIGN SYSTEM — Rahul Pandit Portfolio
    ============================================================ */
 
+/* Theme-scoped CSS variables — set on .theme-dark / .theme-light */
+.theme-dark {
+  --bg: #080c14;
+  --surface: #0d1320;
+  --surface2: #111827;
+  --border: #1e2d45;
+  --neon: #00f5c4;
+  --neon2: #3b82f6;
+  --neon3: #f59e0b;
+  --neon4: #a855f7;
+  --text: #e2eaf5;
+  --muted: #5d7a99;
+}
+
+.theme-light {
+  --bg: #dce8f0;
+  --surface: #eaf2f8;
+  --surface2: #d4e4ee;
+  --border: #b8cfe0;
+  --neon: #00a87a;
+  --neon2: #2563eb;
+  --neon3: #d97706;
+  --neon4: #9333ea;
+  --text: #0f1c2e;
+  --muted: #5a6e85;
+}
+
+/* Fallback (default dark) for :root so non-theme-wrapped elements work */
 :root {
   --bg: #080c14;
   --surface: #0d1320;
@@ -13,6 +41,12 @@
   --neon4: #a855f7;
   --text: #e2eaf5;
   --muted: #5d7a99;
+  --font-heading: 'Syne', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-space: 'Space Mono', monospace;
+}
+
+.theme-dark, .theme-light {
   --font-heading: 'Syne', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --font-space: 'Space Mono', monospace;
@@ -30,11 +64,21 @@ html {
 }
 
 body {
-  background-color: var(--bg);
-  color: var(--text);
   font-family: var(--font-heading);
   line-height: 1.6;
   overflow-x: hidden;
+}
+
+/* App wrapper handles background + grid */
+.App {
+  min-height: 100vh;
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode grid */
+.theme-dark.App {
   background-image:
     repeating-linear-gradient(
       0deg,
@@ -53,32 +97,35 @@ body {
   background-size: 40px 40px;
 }
 
+/* Light mode grid — subtler green tint */
+.theme-light.App {
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 39px,
+      rgba(0, 100, 80, 0.06) 39px,
+      rgba(0, 100, 80, 0.06) 40px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 39px,
+      rgba(0, 100, 80, 0.06) 39px,
+      rgba(0, 100, 80, 0.06) 40px
+    );
+  background-size: 40px 40px;
+}
+
 /* Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 3px;
-  transition: background 0.3s;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--neon);
-}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; transition: background 0.3s; }
+::-webkit-scrollbar-thumb:hover { background: var(--neon); }
 
 /* Typography */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
-  line-height: 1.1;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); line-height: 1.1; }
+a { color: inherit; text-decoration: none; }
 
 /* Section container */
 .section {
@@ -116,7 +163,7 @@ a {
   background: linear-gradient(90deg, var(--border), transparent);
 }
 
-/* Button styles */
+/* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -137,7 +184,6 @@ a {
   color: var(--bg);
   clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
 }
-
 .btn-primary:hover {
   background: #00ddb0;
   transform: translateY(-2px);
@@ -150,7 +196,6 @@ a {
   border: 1px solid var(--neon2);
   clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
 }
-
 .btn-outline:hover {
   background: rgba(59, 130, 246, 0.1);
   box-shadow: 0 8px 30px rgba(59, 130, 246, 0.2);
@@ -165,7 +210,6 @@ a {
   padding: 28px;
   transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .card:hover {
   border-color: var(--neon);
   transform: translateY(-4px);
@@ -173,42 +217,59 @@ a {
 }
 
 /* Neon highlight */
-.neon {
-  color: var(--neon);
-}
+.neon { color: var(--neon); }
 .neon2 { color: var(--neon2); }
 .neon3 { color: var(--neon3); }
 .neon4 { color: var(--neon4); }
-
-/* App wrapper */
-.App {
-  min-height: 100vh;
-}
 
 /* Animations */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
-
 @keyframes pulse-glow {
   0%, 100% { box-shadow: 0 0 0 0 rgba(0, 245, 196, 0.4); }
   50% { box-shadow: 0 0 0 8px rgba(0, 245, 196, 0); }
 }
-
 @keyframes slideInLeft {
   from { opacity: 0; transform: translateX(-40px); }
   to { opacity: 1; transform: translateX(0); }
 }
 
+/* Leaflet Popup Styles */
+.leaflet-popup-content-wrapper {
+  background: #0d1320 !important;
+  border: 1px solid #00f5c4 !important;
+  border-radius: 0 !important;
+  box-shadow: 0 0 20px rgba(0,245,196,0.2) !important;
+  padding: 0 !important;
+}
+.leaflet-popup-content {
+  margin: 0.8rem 1rem !important;
+  color: #e2eaf5 !important;
+}
+.leaflet-popup-tip {
+  background: #0d1320 !important;
+}
+.leaflet-popup-close-button {
+  color: #5d7a99 !important;
+  top: 4px !important;
+  right: 6px !important;
+}
+.leaflet-popup-close-button:hover {
+  color: #00f5c4 !important;
+}
+
+.theme-light .leaflet-popup-content-wrapper {
+  background: #ffffff !important;
+  border-color: #00a87a !important;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
-  .section {
-    padding: 80px 20px;
-  }
+  .section { padding: 80px 20px; }
 }

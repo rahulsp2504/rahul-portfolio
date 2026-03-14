@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useTheme } from '../context/ThemeContext';
 import './Navbar.css';
 
 const navLinks = [
-  { label: 'Map', href: '#career-map' },
+  { label: 'Education', href: '#education' },
   { label: 'Experience', href: '#experience' },
   { label: 'Projects', href: '#projects' },
   { label: 'Skills', href: '#skills' },
@@ -13,6 +14,7 @@ const navLinks = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { isDark, toggle } = useTheme();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -21,7 +23,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+    <nav className={`navbar ${scrolled ? 'scrolled' : ''} ${isDark ? '' : 'navbar-light'}`}>
       <div className="navbar-inner">
         <a href="#hero" className="nav-logo">rsp<span>.dev</span></a>
 
@@ -33,8 +35,22 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <a href="#contact" className="nav-cta btn btn-primary">
-          Hire Me
+        {/* Theme toggle */}
+        <button className="theme-toggle" onClick={toggle} aria-label="Toggle theme" title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}>
+          <span className="toggle-icon">🌙</span>
+          <div className={`toggle-track ${isDark ? 'toggle-dark' : ''}`}>
+            <div className={`toggle-thumb ${isDark ? 'toggle-thumb-dark' : ''}`} />
+          </div>
+          <span className="toggle-icon">☀️</span>
+        </button>
+
+        <a
+          href="https://drive.google.com/file/d/1np8cH452nQHTeSC_MNPFq-vZAFFqvB-a/view?usp=sharing"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="nav-cta hire-me-btn"
+        >
+          Resume
         </a>
 
         <button
