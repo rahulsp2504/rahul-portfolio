@@ -5,13 +5,12 @@ export default function Education() {
   return (
     <section className="section" id="education">
       <div className="section-header">
-        <span className="sec-num">// 01</span>
+        <span className="sec-num">{'// 01'}</span>
         <h2>Education</h2>
         <div className="divider"></div>
       </div>
 
       <div className="education-grid">
-        {/* UCI Card */}
         <div className="edu-card uci-card">
           <div className="edu-top-bar uci-bar"></div>
           <div className="edu-header">
@@ -57,7 +56,6 @@ export default function Education() {
           </div>
         </div>
 
-        {/* BIT Card */}
         <div className="edu-card bit-card">
           <div className="edu-top-bar bit-bar"></div>
           <div className="edu-header">
