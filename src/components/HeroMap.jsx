@@ -50,7 +50,7 @@ const pins = [
   }
 ];
 
-export default function HeroMap() {
+export default function HeroMap({ fullscreen = false, onClose }) {
   const mapRef = useRef(null);
   const instanceRef = useRef(null);
   const markersRef = useRef({});
@@ -58,11 +58,11 @@ export default function HeroMap() {
   const { isDark } = useTheme();
 
   useEffect(() => {
-    if (instanceRef.current) return;
+    if (instanceRef.current || !mapRef.current) return;
 
     const map = L.map(mapRef.current, {
-      center: [25, 78],
-      zoom: 3,
+      center: [33.684023644500854, -117.80864814845685],
+      zoom: 10,
       zoomControl: false,
       scrollWheelZoom: false,
       attributionControl: false,
@@ -121,99 +121,218 @@ export default function HeroMap() {
     }
   }, [isDark]);
 
+  useEffect(() => {
+    const map = instanceRef.current;
+    if (!map) return;
+
+    if (fullscreen) {
+      map.dragging.enable();
+      map.scrollWheelZoom.enable();
+      // Wait for React to apply fullscreen DOM layout before invalidating Leaflet
+      setTimeout(() => {
+        map.invalidateSize({ animate: false });
+        map.setView([25, 40], 3); // Changed from flyTo to setView for instant snap, preventing NaN from animations during layout shift
+      }, 100);
+      setTimeout(() => {
+        map.invalidateSize({ animate: false });
+      }, 400);
+    } else {
+      map.dragging.disable();
+      map.scrollWheelZoom.disable();
+      setTimeout(() => {
+        map.invalidateSize({ animate: false });
+      }, 100);
+    }
+  }, [fullscreen]);
+
   // Handle pin card click
   const handlePinClick = (pin) => {
     setActivePin(pin.id);
     const map = instanceRef.current;
     if (!map) return;
-    map.flyTo([pin.lat, pin.lng], pin.zoom, { duration: 1.2 });
-    setTimeout(() => {
-      markersRef.current[pin.id]?.marker.openPopup();
-    }, 1300);
+
+    // Explicitly validate Lat/Lng before calling flyTo
+    if (pin.lat && pin.lng) {
+      map.flyTo([pin.lat, pin.lng], pin.zoom, { duration: 1.2 });
+      setTimeout(() => {
+        markersRef.current[pin.id]?.marker.openPopup();
+      }, 1300);
+    }
+  };
+
+  const containerStyle = fullscreen ? {
+    position: 'fixed',
+    inset: 0,
+    zIndex: 99999, /* High z-index */
+    background: 'var(--bg)',
+    display: 'flex',
+    flexDirection: 'column',
+    animation: 'fadeIn 0.2s ease',
+  } : {
+    display: 'grid',
+    gridTemplateColumns: '1fr 180px',
+    gap: '0.75rem',
+    height: '100%',
+    width: '100%',
+  };
+
+  const gridStyle = fullscreen ? {
+    flex: 1,
+    display: 'grid',
+    gridTemplateColumns: '1fr 280px',
+    gap: '0',
+    overflow: 'hidden',
+  } : {
+    display: 'contents'
   };
 
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: '1fr 180px',
-      gap: '0.75rem',
-      height: '440px',
-      width: '100%',
-    }}>
-      {/* MAP */}
-      <div style={{
-        border: '1px solid var(--border)',
-        overflow: 'hidden',
-        position: 'relative',
-      }}>
-        <div ref={mapRef} style={{ height: '100%', width: '100%' }} />
-        {/* Bottom fade */}
-        <div style={{
-          position: 'absolute',
-          bottom: 0, left: 0, right: 0,
-          height: '60px',
-          background: 'linear-gradient(transparent, var(--bg))',
-          pointerEvents: 'none',
-          zIndex: 1000,
-        }} />
-      </div>
+    <div style={containerStyle} className={`hero-map-root ${fullscreen ? "map-fullscreen-overlay map-fullscreen-enter" : ""}`}>
 
-      {/* PIN CARDS SIDEBAR */}
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '0.5rem',
-        overflowY: 'auto',
-      }}>
-        {pins.map(pin => (
-          <div
-            key={pin.id}
-            onClick={() => handlePinClick(pin)}
-            style={{
-              background: activePin === pin.id ? 'rgba(0,245,196,0.05)' : 'var(--surface)',
-              border: `1px solid ${activePin === pin.id ? pin.color : 'var(--border)'}`,
-              padding: '0.7rem 0.8rem',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              position: 'relative',
-              overflow: 'hidden',
-              flex: 1,
-            }}
-          >
-            {/* left accent bar */}
-            <div style={{
-              position: 'absolute',
-              top: 0, left: 0,
-              width: '3px', height: '100%',
-              background: pin.color,
-            }} />
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              marginBottom: '0.3rem',
-              paddingLeft: '0.4rem',
-            }}>
-              <span style={{ fontSize: '0.8rem' }}>{pin.emoji}</span>
-              <span style={{
-                fontFamily: 'Syne, sans-serif',
-                fontWeight: 700,
-                fontSize: '0.72rem',
-                color: 'var(--text)',
-                lineHeight: 1.2,
-              }}>{pin.city.split(',')[0]}</span>
-            </div>
-            <div style={{
-              fontFamily: 'JetBrains Mono, monospace',
-              fontSize: '0.6rem',
-              color: 'var(--muted)',
-              paddingLeft: '0.4rem',
-              lineHeight: 1.4,
-            }}>
-              {pin.role.split('·')[0].trim()}
-            </div>
+      {/* Fullscreen header bar */}
+      {fullscreen && (
+        <div className="map-fullscreen-header" style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '0.8rem 1.5rem',
+          borderBottom: '1px solid var(--border)',
+          background: 'var(--surface)',
+          zIndex: 10000,
+          flexShrink: 0,
+        }}>
+          <button onClick={onClose} style={{
+            background: 'transparent',
+            border: '1px solid var(--neon)',
+            color: 'var(--neon)',
+            fontFamily: 'JetBrains Mono, monospace',
+            fontSize: '0.75rem',
+            padding: '0.4rem 1rem',
+            cursor: 'pointer',
+            letterSpacing: '0.08em',
+          }}>
+            ✕ CLOSE MAP
+          </button>
+        </div>
+      )}
+
+      {/* Map + Sidebar layout (changes via gridStyle between normal/fullscreen) */}
+      <div className={fullscreen ? "map-fullscreen-grid" : ""} style={gridStyle}>
+
+        {/* MAP CONTAINER */}
+        <div style={{
+          border: fullscreen ? 'none' : '1px solid var(--border)',
+          overflow: 'hidden',
+          position: 'relative',
+        }}>
+          <div ref={mapRef} style={{ height: '100%', width: '100%' }} />
+
+          {/* Bottom fade (hide in fullscreen) */}
+          <div style={{
+            position: 'absolute',
+            bottom: 0, left: 0, right: 0,
+            height: '60px',
+            background: 'linear-gradient(transparent, var(--bg))',
+            pointerEvents: 'none',
+            zIndex: 1000,
+            display: fullscreen ? 'none' : 'block'
+          }} />
+
+          {/* Label (hide in fullscreen since it has a top header) */}
+          <div style={{
+            position: 'absolute',
+            bottom: '0.6rem', left: '0.8rem',
+            zIndex: 1001,
+            fontFamily: 'JetBrains Mono, monospace',
+            fontSize: '0.62rem',
+            color: 'var(--neon)',
+            letterSpacing: '0.08em',
+            display: fullscreen ? 'none' : 'flex',
+            alignItems: 'center',
+            gap: '0.4rem',
+          }}>
           </div>
-        ))}
+        </div>
+
+        {/* PIN CARDS SIDEBAR */}
+        <div className="pin-sidebar map-fullscreen-sidebar" style={fullscreen ? {
+          borderLeft: '1px solid var(--border)',
+          overflowY: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0',
+          background: 'var(--bg)',
+        } : {
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.5rem',
+          overflowY: 'auto',
+        }}>
+          {pins.map(pin => (
+            <div
+              key={pin.id}
+              onClick={() => handlePinClick(pin)}
+              style={{
+                padding: fullscreen ? '1.2rem 1.5rem' : '0.7rem 0.8rem',
+                borderBottom: fullscreen ? '1px solid var(--border)' : 'none',
+                background: activePin === pin.id ? 'rgba(0,245,196,0.05)' : (fullscreen ? 'transparent' : 'var(--surface)'),
+                border: fullscreen ? 'none' : `1px solid ${activePin === pin.id ? pin.color : 'var(--border)'}`,
+                borderLeft: fullscreen ? `3px solid ${activePin === pin.id ? pin.color : 'transparent'}` : 'none',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                position: 'relative',
+                overflow: 'hidden',
+                flex: fullscreen ? 'none' : 1,
+              }}
+            >
+              {/* left accent bar (normal mode) */}
+              {!fullscreen && (
+                <div style={{
+                  position: 'absolute',
+                  top: 0, left: 0,
+                  width: '3px', height: '100%',
+                  background: pin.color,
+                }} />
+              )}
+
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: fullscreen ? '0.5rem' : '0.4rem',
+                marginBottom: fullscreen ? '0.4rem' : '0.3rem',
+                paddingLeft: fullscreen ? '0' : '0.4rem',
+              }}>
+                <span style={{ fontSize: fullscreen ? '1rem' : '0.8rem' }}>{pin.emoji}</span>
+                <span style={{
+                  fontFamily: 'Syne, sans-serif',
+                  fontWeight: 700,
+                  fontSize: fullscreen ? '0.9rem' : '0.72rem',
+                  color: 'var(--text)',
+                  lineHeight: 1.2,
+                }}>{fullscreen ? pin.city : pin.city.split(',')[0]}</span>
+              </div>
+
+              <div style={{
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: fullscreen ? '0.72rem' : '0.6rem',
+                color: 'var(--muted)',
+                paddingLeft: fullscreen ? '0' : '0.4rem',
+                marginBottom: fullscreen ? '0.3rem' : '0',
+                lineHeight: 1.4,
+              }}>
+                {fullscreen ? pin.role : pin.role.split('·')[0].trim()}
+              </div>
+
+              {fullscreen && (
+                <div style={{
+                  fontFamily: 'JetBrains Mono, monospace',
+                  fontSize: '0.72rem',
+                  color: pin.color,
+                }}>{pin.stat}</div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

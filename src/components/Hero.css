@@ -237,14 +237,30 @@
   50% { transform: translateY(6px); }
 }
 
+/* Stacking Context Overrides for Fullscreen Map */
+.hero.has-fullscreen {
+  overflow: visible !important;
+  z-index: 99999 !important;
+}
+.hero-content.has-fullscreen {
+  position: static !important;
+  z-index: auto !important;
+}
+.hero-right.has-fullscreen {
+  animation: none !important;
+  transform: none !important;
+  position: static !important;
+  z-index: auto !important;
+}
+.hero-map-wrapper.has-fullscreen {
+  position: static !important;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .hero-content {
     grid-template-columns: 1fr;
     gap: 40px;
-  }
-  .hero-right {
-    display: none;
   }
   .hero {
     padding: 100px 20px 80px;

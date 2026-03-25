@@ -269,7 +269,127 @@ a { color: inherit; text-decoration: none; }
   border-color: #00a87a !important;
 }
 
+/* Fullscreen Map Animation */
+.map-fullscreen-enter {
+  animation: mapFadeIn 0.25s ease;
+}
+@keyframes mapFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
-  .section { padding: 80px 20px; }
+  /* NAVBAR */
+  nav {
+    padding: 0.9rem 1.2rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .nav-links { display: none !important; }
+  .nav-github { display: none !important; }
+
+  /* HERO */
+  #hero {
+    flex-direction: column;
+    padding: 5rem 1.2rem 2rem;
+    min-height: auto;
+  }
+  .hero-content {
+    width: 100%;
+  }
+  .hero-name {
+    font-size: clamp(3rem, 15vw, 5rem);
+  }
+  /* Hide hero map on mobile — show a simple location badge instead */
+  .hero-map-wrapper {
+    display: block !important;
+    width: 100% !important;
+    height: 240px !important;
+    margin-top: 1.5rem !important;
+  }
+
+  /* Hide the pin sidebar inside HeroMap on mobile */
+  .hero-map-wrapper .pin-sidebar {
+    display: none !important;
+  }
+
+  /* Make the map fill full width on mobile */
+  .hero-map-wrapper > div {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* HERO CTAS */
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .btn-primary, .btn-secondary, .btn-outline {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* EDUCATION */
+  .education-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* EXPERIENCE */
+  .exp-content {
+    grid-template-columns: 1fr !important;
+  }
+  .timeline-entry {
+    grid-template-columns: 1fr !important;
+  }
+  .exp-meta {
+    padding: 0 0 0.5rem 2rem !important;
+  }
+  .exp-body {
+    padding: 0 0 0 2rem !important;
+  }
+
+  /* PROJECTS */
+  .projects-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* SKILLS */
+  .skills-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* LEADERSHIP */
+  .leadership-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* CONTACT is handled in Contact.css */ 
+
+  /* SECTIONS */
+  .section {
+    padding: 3rem 1.2rem;
+  }
+
+  /* FOOTER */
+  footer {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    padding: 1.2rem;
+  }
+
+  /* FULLSCREEN MAP on mobile */
+  .map-fullscreen-sidebar {
+    display: none !important;
+  }
+
+  .map-fullscreen-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .map-fullscreen-header {
+    padding: 0.6rem 1rem !important;
+    font-size: 0.65rem !important;
+  }
 }

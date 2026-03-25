@@ -35,13 +35,38 @@ export default function Navbar() {
           ))}
         </ul>
 
+        <a
+          href="https://github.com/rahulsp2504"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="nav-github"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.4rem',
+            fontFamily: 'JetBrains Mono, monospace',
+            fontSize: '0.75rem',
+            color: 'var(--muted)',
+            textDecoration: 'none',
+            letterSpacing: '0.06em',
+            transition: 'color 0.2s',
+            border: '1px solid var(--border)',
+            padding: '0.35rem 0.8rem',
+            marginRight: '0.5rem',
+          }}
+          onMouseEnter={e => e.currentTarget.style.color = 'var(--neon)'}
+          onMouseLeave={e => e.currentTarget.style.color = 'var(--muted)'}
+        >
+          ⌥ GitHub
+        </a>
+
         {/* Theme toggle */}
         <button className="theme-toggle" onClick={toggle} aria-label="Toggle theme" title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}>
-          <span className="toggle-icon">🌙</span>
+          <span className="toggle-icon">☀️</span>
           <div className={`toggle-track ${isDark ? 'toggle-dark' : ''}`}>
             <div className={`toggle-thumb ${isDark ? 'toggle-thumb-dark' : ''}`} />
           </div>
-          <span className="toggle-icon">☀️</span>
+          <span className="toggle-icon">🌙</span>
         </button>
 
         <a

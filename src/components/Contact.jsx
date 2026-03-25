@@ -23,6 +23,13 @@ const contactItems = [
     href: 'https://linkedin.com/in/rahulsharadpandit',
     color: 'neon4',
   },
+  {
+    icon: '⌥',
+    label: 'GitHub',
+    value: 'github.com/rahulsp2504',
+    href: 'https://github.com/rahulsp2504',
+    color: 'neon2',
+  },
 ];
 
 export default function Contact() {

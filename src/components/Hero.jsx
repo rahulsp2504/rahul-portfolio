@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Hero.css';
 import HeroMap from './HeroMap';
 
 export default function Hero() {
+  const [mapFullscreen, setMapFullscreen] = useState(false);
+
+  useEffect(() => {
+    const handler = (e) => { if (e.key === 'Escape') setMapFullscreen(false); };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
+
   return (
-    <section className="hero" id="hero">
+    <section className={`hero ${mapFullscreen ? 'has-fullscreen' : ''}`} id="hero">
       {/* Background glow */}
       <div className="hero-glow" />
 
-      <div className="hero-content">
+      <div className={`hero-content ${mapFullscreen ? 'has-fullscreen' : ''}`}>
         <div className="hero-left">
           <div className="hero-eyebrow">
             <span className="hero-tag">
@@ -32,20 +40,22 @@ export default function Hero() {
           </p>
 
           <div className="hero-actions">
-            <a href="#career-map" className="btn btn-primary">
+            <button onClick={() => setMapFullscreen(true)} className="btn btn-primary">
               <span>Explore Journey</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
-            </a>
+            </button>
             <a href="#contact" className="btn btn-outline">
               Get In Touch
             </a>
           </div>
         </div>
 
-        <div className="hero-right">
-          <HeroMap />
+        <div className={`hero-right ${mapFullscreen ? 'has-fullscreen' : ''}`}>
+          <div className={`hero-map-wrapper ${mapFullscreen ? 'has-fullscreen' : ''}`}>
+            <HeroMap fullscreen={mapFullscreen} onClose={() => setMapFullscreen(false)} />
+          </div>
         </div>
       </div>
 
